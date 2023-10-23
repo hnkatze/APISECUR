@@ -1,18 +1,18 @@
 import { Router } from "express";
 import {
-  cretaNewCompany,
+  createNewCompany,
   deleteCompany,
   getCompanyById,
-  getcompany,
+  getCompany,
   updateCompany,
 } from "../controllers/company.controller";
 const router = Router();
 
-router.get("/Company", getcompany);
+router.get("/Company", getCompany );
 
 router.get("/Company/:id", getCompanyById);
 
-router.post("/Company", cretaNewCompany);
+router.post("/Company", createNewCompany);
 
 router.delete("/Company/:id", deleteCompany);
 

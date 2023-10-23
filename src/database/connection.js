@@ -1,25 +1,12 @@
+import { createPool } from 'mysql2/promise';
+import config from '../config';
 
-import sql from "mssql";
-import config from "../config";
-const dbSetting = {
-  user: config.dbUser ,
+const pool = createPool({
+  host: config .dbServer,
+  user: config.dbUser,
   password: config.dbPassword,
-  server: config.dbServer,
   database: config.dbDatabase,
   port: config.portDb,
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
-};
+});
 
-export async function getConnetion() {
-  try {
-    const pool = await sql.connect(dbSetting);
-    return pool;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export { sql };
+export { pool };

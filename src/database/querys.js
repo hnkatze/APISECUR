@@ -1,18 +1,18 @@
 export const queries = {
   getAllCompany: "SELECT * FROM Company",
   createNewCompany:
-    "INSERT INTO Company ( Id, Name, Description, Code) Values ( @Id, @Name, @Description, @Code)",
-  getCompanyById: "SELECT * FROM Company Where Id = @Id",
-  deleteCompany: "DELETE FROM Company Where Id = @Id",
+    "INSERT INTO Company (Id, Name, Description, Code) VALUES (?, ?, ?, ?)",
+  getCompanyById: "SELECT * FROM Company WHERE Id = ?",
+  deleteCompany: "DELETE FROM Company WHERE Id = ?",
   updateCompany:
-    "UPDATE Company SET Name = @Name, Description = @Description, Code = @Code WHERE Id = @Id",
+    "UPDATE Company SET Name = ?, Description = ?, Code = ? WHERE Id = ?",
   getAllEmployeesByCompany:
-    "SELECT * FROM Employee WHERE CompanyId = @CompanyId",
-    getAllEmployee: "SELECT * FROM Employee",
+    "SELECT * FROM Employee WHERE CompanyId = ?",
+  getAllEmployee: "SELECT * FROM Employee",
   createNewEmployee:
-    "INSERT INTO Employee (Id, Name, LastName, Age, Code, Description, DNI, Placa, CompanyId) VALUES (@Id, @Name, @LastName, @Age, @Code, @Description, @DNI, @Placa, @CompanyId)",
-  getEmployeeById: "SELECT * FROM Employee WHERE id = @Id",
+    "INSERT INTO Employee (Id, CompanyId, Name, LastName, Age, Code, Description, DNI, Placa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  getEmployeeById: "SELECT * FROM Employee WHERE Id = ?",
   updateEmployee:
-    "UPDATE Employee SET Name = @Name, LastName = @LastName, Age = @Age, Code = @Code, Description = @Description, DNI = @DNI, Placa = @Placa WHERE id = @Id",
-  deleteEmployee: "DELETE FROM Employee WHERE id = @Id",
+    "UPDATE Employee SET Name = ?, LastName = ?, Age = ?, Code = ?, Description = ?, DNI = ?, Placa = ? WHERE Id = ?",
+  deleteEmployee: "DELETE FROM Employee WHERE Id = ?",
 };

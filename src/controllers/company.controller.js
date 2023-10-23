@@ -1,67 +1,67 @@
-import { getConnetion, queries, sql } from "../database";
-const uuid = require("uuid");
+import { pool, queries } from '../database';
+const uuid = require('uuid');
 
-export const getcompany = async (req, res) => {
+export const getCompany = async (req, res) => {
   try {
-    const pool = await getConnetion();
-    const result = await pool.request().query(queries.getAllCompany);
-    console.log(result);
-    res.json(result.recordset);
+    const [result] = await pool.execute(queries.getAllCompany);
+    res.json(result);
   } catch (error) {
-    res.status(500);
-    res.send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
-export const cretaNewCompany = async (req, res) => {
+export const createNewCompany = async (req, res) => {
   const { Name, Description, Code } = req.body;
   const Id = uuid.v4();
-  console.log(Name, Description);
-  if (Name == null || Description == null) {
-    return res.status(400).json({ msg: "Bad Request. please fill all fields" });
+  if (!Id || !Name || !Description || !Code) {
+    return res.status(400).json({ msg: 'Bad Request. Please fill all fields' });
   }
+
   try {
-    const pool = await getConnetion();
-    await pool
-      .request()
-      .input("Id", sql.VarChar, Id)
-      .input("Name", sql.VarChar, Name)
-      .input("Description", sql.Text, Description)
-      .input("Code", sql.VarChar, Code)
-      .query(queries.createNewCompany);
+    await pool.execute(queries.createNewCompany, [Id, Name, Description, Code]);
     res.json({ Id });
   } catch (error) {
-    res.status(500);
-    res.send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
 export const getCompanyById = async (req, res) => {
   const { id } = req.params;
-  const pool = await getConnetion();
-  const resul = await pool
-    .request()
-    .input("Id", id)
-    .query(queries.getCompanyById);
-  res.send(resul.recordset[0]);
+
+  try {
+    const [result] = await pool.execute(queries.getCompanyById, [id]);
+    if (result.length === 0) {
+      return res.status(404).json({ msg: 'Company not found' });
+    }
+    res.json(result[0]);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
 
 export const deleteCompany = async (req, res) => {
   const { id } = req.params;
-  const pool = await getConnetion();
-  await pool.request().input("Id", id).query(queries.deleteCompany);
-  res.send(204);
+
+  try {
+    await pool.execute(queries.deleteCompany, [id]);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
+
 export const updateCompany = async (req, res) => {
   const { id } = req.params;
   const { Name, Description, Code } = req.body;
-  const pool = await getConnetion();
- await pool
-    .request()
-    .input("Id", sql.VarChar, id)
-    .input("Name", sql.VarChar, Name)
-    .input("Description", sql.Text, Description)
-    .input("Code", sql.VarChar, Code)
-    .query(queries.updateCompany);
-  res.send(204);
+
+  if (!Name || !Description || !Code) {
+    return res.status(400).json({ msg: 'Bad Request. Please fill all fields' });
+  }
+
+  try {
+    await pool.execute(queries.updateCompany, [Name, Description, Code, id]);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };

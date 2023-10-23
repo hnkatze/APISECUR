@@ -1,38 +1,35 @@
-import { getConnetion, queries, sql } from "../database";
+import { getConnetion, queries, mysql, pool } from "../database";
 const uuid = require("uuid");
 
 export const getEmployees = async (req, res) => {
   try {
-    const pool = await getConnetion();
-    const result = await pool.request().query(queries.getAllEmployee);
-    res.json(result.recordset);
+    const [rows] = await pool.query(queries.getAllEmployee);  // Utiliza pool.query para realizar consultas en MySQL2
+    res.json(rows);
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
 
 export const createEmployee = async (req, res) => {
-  const { Name, LastName, Age, Code, Description, DNI, Placa,CompanyId } = req.body;
+  const { Name, LastName, Age, Code, Description, DNI, Placa, CompanyId } = req.body;
   const Id = uuid.v4();
-
-  if (Name == null || LastName == null || Age == null) {
-    return res.status(400).json({ msg: "Bad Request. Please fill all required fields" });
+console.log(Id)
+  if (Name == null || LastName == null) {
+    return res.status(400).json({ msg: 'Bad Request. Please fill all required fields' });
   }
 
   try {
-    const pool = await getConnetion();
-    await pool
-      .request()
-      .input("Id", sql.VarChar, Id)
-      .input("CompanyId", sql.VarChar, CompanyId)
-      .input("Name", sql.VarChar, Name)
-      .input("LastName", sql.VarChar, LastName)
-      .input("Age", sql.Int, Age)
-      .input("Code", sql.VarChar, Code)
-      .input("Description", sql.Text, Description)
-      .input("DNI", sql.VarChar, DNI)
-      .input("Placa", sql.VarChar, Placa)
-      .query(queries.createNewEmployee);
+    const [result] = await pool.execute(queries.createNewEmployee, [
+      Id,
+      CompanyId,
+      Name,
+      LastName,
+      Age,
+      Code,
+      Description,
+      DNI,
+      Placa,
+    ]);
 
     res.json({ Id });
   } catch (error) {
@@ -44,37 +41,29 @@ export const getEmployeeByIdCompany = async (req, res) => {
   const { CompanyId } = req.params;
 
   try {
-    const pool = await getConnetion();
-    const result = await pool
-      .request()
-      .input("CompanyId", CompanyId)
-      .query(queries.getAllEmployeesByCompany);
-      res.json(result.recordset)
+    const [result] = await pool.execute(queries.getAllEmployeesByCompany, [CompanyId]);
 
-    if (result.recordset.length === 0) {
-      return res.status(404).json({ msg: "Employee not found" });
+    if (result.length === 0) {
+      return res.status(404).json({ msg: 'Employee not found' });
     }
 
-    res.json(result.recordset[0]);
+    res.json(result);
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
+
 export const getEmployeeById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const pool = await getConnetion();
-    const result = await pool
-      .request()
-      .input("Id", id)
-      .query(queries.getEmployeeById);
+    const [result] = await pool.execute(queries.getEmployeeById, [id]);
 
-    if (result.recordset.length === 0) {
-      return res.status(404).json({ msg: "Employee not found" });
+    if (result.length === 0) {
+      return res.status(404).json({ msg: 'Employee not found' });
     }
 
-    res.json(result.recordset[0]);
+    res.json(result[0]);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -85,24 +74,22 @@ export const updateEmployee = async (req, res) => {
   const { Name, LastName, Age, Code, Description, DNI, Placa } = req.body;
 
   try {
-    const pool = await getConnetion();
-    const result = await pool
-      .request()
-      .input("Id", sql.VarChar, id)
-      .input("Name", sql.VarChar, Name)
-      .input("LastName", sql.VarChar, LastName)
-      .input("Age", sql.Int, Age)
-      .input("Code", sql.VarChar, Code)
-      .input("Description", sql.Text, Description)
-      .input("DNI", sql.VarChar, DNI)
-      .input("Placa", sql.VarChar, Placa)
-      .query(queries.updateEmployee);
+    const [result] = await pool.execute(queries.updateEmployee, [
+      Name,
+      LastName,
+      Age,
+      Code,
+      Description,
+      DNI,
+      Placa,
+      id,
+    ]);
 
-    if (result.rowsAffected[0] === 0) {
-      return res.status(404).json({ msg: "Employee not found" });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: 'Employee not found' });
     }
 
-    res.send(204); // Respuesta exitosa sin contenido
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -112,17 +99,13 @@ export const deleteEmployee = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const pool = await getConnetion();
-    const result = await pool
-      .request()
-      .input("Id", id)
-      .query(queries.deleteEmployee);
+    const [result] = await pool.execute(queries.deleteEmployee, [id]);
 
-    if (result.rowsAffected[0] === 0) {
-      return res.status(404).json({ msg: "Employee not found" });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: 'Employee not found' });
     }
 
-    res.send(204); // Respuesta exitosa sin contenido
+    res.sendStatus(204);
   } catch (error) {
     res.status(500).send(error.message);
   }
