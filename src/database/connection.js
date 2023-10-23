@@ -6,6 +6,7 @@ const dbSetting = {
   password: config.dbPassword,
   server: config.dbServer,
   database: config.dbDatabase,
+  port: config.portDb,
   options: {
     encrypt: true,
     trustServerCertificate: true,
