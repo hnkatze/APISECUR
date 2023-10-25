@@ -7,15 +7,6 @@ APISECUR es una API para gestionar información de empleados y empresas.
 
 APISECUR proporciona endpoints para la gestión de empleados y empresas. Puedes realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) para administrar la información de los empleados y empresas.
 
-## Tabla de contenidos
-
-- [Características](#características)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Documentación](#documentación)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
 
 ## Características
 
@@ -34,4 +25,4 @@ APISECUR proporciona endpoints para la gestión de empleados y empresas. Puedes 
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/TuUsuario/APISECUR.git
+git clone https://github.com/hnkatze/APISECUR.git
