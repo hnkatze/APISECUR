@@ -6,7 +6,7 @@ import {
   getCompany,
   updateCompany,
 } from "../controllers/company.controller";
-const authenticateApiKey = require('../database/aunthenticated')
+const authenticateApiKey = require('../database/aunthenticated');
 const router = Router();
 
 router.get("/Company", authenticateApiKey, getCompany );
