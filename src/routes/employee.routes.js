@@ -7,19 +7,19 @@ import {
   getEmployees,
   updateEmployee,
 } from "../controllers/employee.controller";
-
+const authenticateApiKey = require('../database/aunthenticated')
 const router = Router();
 
-router.get("/Employees", getEmployees);
+router.get("/Employees", authenticateApiKey, getEmployees);
 
-router.get("/Employees/:id", getEmployeeById);
+router.get("/Employees/:id",authenticateApiKey, getEmployeeById);
 
-router.post("/Employees", createEmployee);
+router.post("/Employees", authenticateApiKey, createEmployee);
 
-router.delete("/Employees/:id", deleteEmployee);
+router.delete("/Employees/:id",authenticateApiKey, deleteEmployee);
 
-router.put("/Employees/:id", updateEmployee);
+router.put("/Employees/:id",authenticateApiKey, updateEmployee);
 
-router.get("/Company/:CompanyId/Employees", getEmployeeByIdCompany);
+router.get("/Company/:CompanyId/Employees",authenticateApiKey, getEmployeeByIdCompany);
 
 export default router;

@@ -6,16 +6,17 @@ import {
   getCompany,
   updateCompany,
 } from "../controllers/company.controller";
+const authenticateApiKey = require('../database/aunthenticated')
 const router = Router();
 
-router.get("/Company", getCompany );
+router.get("/Company", authenticateApiKey, getCompany );
 
-router.get("/Company/:id", getCompanyById);
+router.get("/Company/:id", authenticateApiKey, getCompanyById);
 
-router.post("/Company", createNewCompany);
+router.post("/Company", authenticateApiKey, createNewCompany);
 
 router.delete("/Company/:id", deleteCompany);
 
-router.put("/Company/:id", updateCompany);
+router.put("/Company/:id", authenticateApiKey , updateCompany);
 
 export default router;
