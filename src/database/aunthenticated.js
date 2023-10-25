@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 
 
-function authenticateApiKey(req, res, next) {
+export function authenticateApiKey(req, res, next) {
   const apiKey = req.headers['api-key'];
 
   if (!apiKey || apiKey !== config.apiKeyHeaders) {

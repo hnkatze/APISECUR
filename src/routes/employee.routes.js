@@ -7,7 +7,7 @@ import {
   getEmployees,
   updateEmployee,
 } from "../controllers/employee.controller";
-const authenticateApiKey = require('../database/aunthenticated')
+import { authenticateApiKey } from "../database/aunthenticated";
 const router = Router();
 
 router.get("/Employees", authenticateApiKey, getEmployees);
