@@ -15,7 +15,7 @@ router.get("/Company/:id", authenticateApiKey, getCompanyById);
 
 router.post("/Company", authenticateApiKey, createNewCompany);
 
-router.delete("/Company/:id", deleteCompany);
+router.delete("/Company/:id",authenticateApiKey, deleteCompany);
 
 router.put("/Company/:id", authenticateApiKey , updateCompany);
 
